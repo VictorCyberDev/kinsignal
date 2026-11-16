@@ -35,3 +35,12 @@ test("receipt does not falsely claim verified truth",()=>{
  assert.match(r.provenance,/not legal certification/);
 });
 test("missing descriptions are rejected",()=>assert.throws(()=>createCase({title:"Missing",category:"privacy",description:" "}),/required/));
+test("accidentally entered OTP values are removed from stored case descriptions",()=>{
+ const c=createCase({title:"Accidental secret",category:"account",description:"My OTP is 123456 and the caller asked me to share it."});
+ assert.ok(!c.description.includes("123456"));
+ assert.match(c.description,/redacted/);
+});
+test("long payment card-like numbers are removed from case text",()=>{
+ const c=createCase({title:"Card concern",category:"payment",description:"Someone asked for 4111 1111 1111 1111 over the phone."});
+ assert.ok(!c.description.includes("4111 1111 1111 1111"));
+});
