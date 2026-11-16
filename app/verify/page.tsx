@@ -1,0 +1,7 @@
+"use client";
+import {useState} from "react";
+import {reviewUrl,type UrlReview} from "../../src/safety/url";
+export default function Verify(){
+ const [url,setUrl]=useState(""),[review,setReview]=useState<UrlReview|null>(null);
+ return <main className="shell"><header className="top"><a href="/" className="logo">✳ KinSignal</a><a href="/">← Back to case</a></header><section className="intro"><p className="eyebrow">KINSignal VERIFY</p><h1>Check the claim, not just the link.</h1><p className="lead">Review URL syntax offline without opening the destination. This is not a domain reputation scan or proof of legitimacy.</p></section><section className="panel"><label htmlFor="link">URL to examine</label><input id="link" value={url} maxLength={2048} placeholder="https://example.org" onChange={e=>setUrl(e.target.value)}/><button className="primary" onClick={()=>setReview(reviewUrl(url))}>Review without visiting</button>{review&&<div role="status"><h2>{review.accepted?"Text-level review":"Cannot review this URL"}</h2>{review.hostname&&<p>Parsed hostname: <strong>{review.hostname}</strong></p>}<h3>Signals</h3>{review.signals.length?<ul>{review.signals.map(x=><li key={x}>{x}</li>)}</ul>:<p>No listed structural indicators found. This does not mean the address is legitimate or safe.</p>}<h3>Limitations</h3><ul>{review.limitations.map(x=><li key={x}>{x}</li>)}</ul><p>For claims involving banks, employers or government agencies, find a trusted channel independently; do not follow contact details included in the suspicious message.</p></div>}</section></main>;
+}
