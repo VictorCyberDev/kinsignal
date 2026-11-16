@@ -33,7 +33,11 @@ const generalActions:Action[]=[
  {id:"document",title:"Record a brief, redacted timeline",reason:"Keep only the information needed for follow-up. Never include passwords or one-time codes.",priority:3,status:"NOT_STARTED"}
 ];
 function sanitiseInput(s:string):string {
- return s.replace(/\b\d{4,8}\b(?=\s*(?:is my|otp|code))/gi,"[redacted]").slice(0,5000);
+ return s
+  .replace(/\\b(password|passcode|otp|verification code|one[- ]time code)\\s*(?:is|was|:|=)\\s*[^\\s,.;]{4,}/gi,"$1: [redacted]")
+  .replace(/\\b(?:\\d[ -]*?){13,19}\\b/g,"[redacted payment number]")
+  .replace(/\\b\\d{4,8}\\b(?=\\s*(?:is my|otp|code))/gi,"[redacted]")
+  .slice(0,5000);
 }
 function actionFromRule(rule:Rule):Action {return {id:"rule-"+rule.id,title:rule.action,reason:rule.reason,priority:rule.priority,status:"NOT_STARTED"};}
 export function assess(description:string,category:Category="message"):Omit<Assessment,"id"|"at"> & {suggestedActions:Action[]} {
