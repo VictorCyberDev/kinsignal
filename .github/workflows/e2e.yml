@@ -26,6 +26,12 @@ jobs:
       - run: npm run build
       - run: npm run test:e2e
       - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: kinsignal-product-screenshots
+          path: evidence/screenshots/
+          retention-days: 14
+      - uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: browser-failure-traces
