@@ -34,9 +34,9 @@ const generalActions:Action[]=[
 ];
 function sanitiseInput(s:string):string {
  return s
-  .replace(/\\b(password|passcode|otp|verification code|one[- ]time code)\\s*(?:is|was|:|=)\\s*[^\\s,.;]{4,}/gi,"$1: [redacted]")
-  .replace(/\\b(?:\\d[ -]*?){13,19}\\b/g,"[redacted payment number]")
-  .replace(/\\b\\d{4,8}\\b(?=\\s*(?:is my|otp|code))/gi,"[redacted]")
+  .replace(/\b(password|passcode|otp|verification code|one[- ]time code)\s*(?:is|was|:|=)\s*[^\s,.;]{4,}/gi,"$1: [redacted]")
+  .replace(/\b(?:\d[ -]*?){13,19}\b/g,"[redacted payment number]")
+  .replace(/\b\d{4,8}\b(?=\s*(?:is my|otp|code))/gi,"[redacted]")
   .slice(0,5000);
 }
 function actionFromRule(rule:Rule):Action {return {id:"rule-"+rule.id,title:rule.action,reason:rule.reason,priority:rule.priority,status:"NOT_STARTED"};}
